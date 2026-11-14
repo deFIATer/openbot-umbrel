@@ -1,0 +1,64 @@
+name: Auto-update OpenBot Release
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'  # Runs every 6 hours
+  workflow_dispatch:      # Allows manual trigger in GitHub Actions tab
+
+permissions:
+  contents: write
+
+jobs:
+  check-and-update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check for new OpenBot release
+        id: check
+        run: |
+          LATEST_JSON=$(curl -fsSL https://api.github.com/repos/nightly-labs/openbot/releases/latest)
+          LATEST_TAG=$(echo "$LATEST_JSON" | jq -r .tag_name | sed 's/^v//')
+          echo "latest_version=$LATEST_TAG" >> "$GITHUB_OUTPUT"
+          
+          CURRENT_VERSION=$(grep '^version:' openbot-app/umbrel-app.yml | sed -E 's/version: *"v?([^"]+)".*/\1/')
+          echo "current_version=$CURRENT_VERSION" >> "$GITHUB_OUTPUT"
+          
+          echo "Latest upstream version: $LATEST_TAG"
+          echo "Current app store version: $CURRENT_VERSION"
+          
+          if [ -n "$LATEST_TAG" ] && [ "$LATEST_TAG" != "null" ] && [ "$LATEST_TAG" != "$CURRENT_VERSION" ]; then
+            echo "has_update=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_update=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Apply update and push
+        if: steps.check.outputs.has_update == 'true'
+        run: |
+          NEW_VER="${{ steps.check.outputs.latest_version }}"
+          echo "Applying update to OpenBot v${NEW_VER}..."
+          
+          python3 -c "
+          import re
+          with open('openbot-app/umbrel-app.yml', 'r') as f:
+              content = f.read()
+
+          content = re.sub(r'version:\s*\"?[^\s\n\"]+\"?', f'version: \"${NEW_VER}\"', content)
+          new_notes = f'''releaseNotes: >-\n  Updated to OpenBot v${NEW_VER}. Release details: https://github.com/nightly-labs/openbot/releases/tag/v${NEW_VER}'''
+          content = re.sub(r'releaseNotes:\s*>-\n\s+.*', new_notes, content)
+
+          with open('openbot-app/umbrel-app.yml', 'w') as f:
+              f.write(content)
+          "
+          
+          # Update seccomp profile if changed upstream
+          curl -fsSL https://raw.githubusercontent.com/nightly-labs/openbot/main/docker/seccomp.json -o openbot-app/seccomp.json
+          
+          # Git commit and push
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add openbot-app/umbrel-app.yml openbot-app/seccomp.json
+          git commit -m "chore(release): bump OpenBot to v${NEW_VER}"
+          git push

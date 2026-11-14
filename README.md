@@ -66,6 +66,21 @@ sudo docker exec -it openbot-app_openbot_1 openbot status
 
 ---
 
+## 🔄 Aktualizacje (W 100% zautomatyzowane)
+
+Repozytorium posiada wbudowany workflow **GitHub Actions** (`.github/workflows/update-openbot.yml`), który:
+1. Co 6 godzin automatycznie sprawdza nowe wydania na [nightly-labs/openbot](https://github.com/nightly-labs/openbot/releases).
+2. Gdy pojawi się nowa wersja (np. `0.71.0`), bot sam podbija numer wersji w `umbrel-app.yml` i aktualizuje profil `seccomp.json`.
+3. Twój Umbrel wykrywa zmianę i wyświetla **przycisk „Update” (Aktualizuj)** bezpośrednio na kafelku OpenBota w panelu Umbrel.
+
+**Szybka aktualizacja w dowolnym momencie (bez czekania na App Store):**
+```bash
+umbrel app compose openbot-app pull && umbrel app compose openbot-app up -d
+```
+Wszystkie dane, agenci i sesje są trwale zapisane w katalogu `/data` i nie znikają podczas aktualizacji.
+
+---
+
 ## 🛠️ Zawartość repozytorium
 
 - `umbrel-app-store.yml` – konfiguracja sklepu aplikacji Umbrel.
