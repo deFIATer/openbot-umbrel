@@ -10,9 +10,8 @@ services:
     image: ghcr.io/nightly-labs/openbot:latest
     restart: unless-stopped
     security_opt:
-      - seccomp=${APP_DATA_DIR:-.}/seccomp.json
+      - seccomp=unconfined
       - apparmor=unconfined
-      - no-new-privileges:true
     shm_size: 1g
     stop_grace_period: 60s
     volumes:
