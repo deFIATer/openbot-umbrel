@@ -1,0 +1,45 @@
+manifestVersion: 1
+id: openbot-app
+name: OpenBot
+tagline: Local-first workspace & persistent AI teammates
+category: ai
+version: "0.70.0"
+port: 8092
+description: >-
+  OpenBot is a local-first workspace for persistent AI teammates. It connects to
+  Codex, Claude Code, Grok, Gemini, Cursor, Cline, Devin, and Hermes Agent.
+
+
+  Each agent gets its own workspace, conversation, local queues, file transfers,
+  and embedded browser in one system.
+
+
+  ⚡ GETTING STARTED ON UMBREL:
+
+
+  1. Open the OpenBot app tile to view the local management portal.
+
+  2. Sign in or claim the server by opening the Umbrel Terminal or SSH and running:
+
+     docker exec -it openbot-app_openbot_1 openbot login
+
+  3. Use your server from https://openbot.run/app, or connect your desktop and mobile apps!
+developer: Nightly Labs
+website: https://openbot.run
+submitter: deFIATer
+submission: https://github.com/nightly-labs/openbot
+repo: https://github.com/nightly-labs/openbot
+support: https://github.com/nightly-labs/openbot/issues
+gallery:
+  - https://raw.githubusercontent.com/nightly-labs/openbot/main/apps/auth-api/content-art/compare/art/article/best-ai-agent-apps.webp
+  - https://raw.githubusercontent.com/nightly-labs/openbot/main/apps/auth-api/content-art/compare/art/article/codex-vs-claude-code.webp
+  - https://raw.githubusercontent.com/nightly-labs/openbot/main/apps/auth-api/content-art/compare/art/article/hermes-agent.webp
+icon: https://raw.githubusercontent.com/nightly-labs/openbot/main/build/icon-production.png
+releaseNotes: >-
+  Initial Umbrel packaging for OpenBot v0.70.0. Includes persistent data storage, seccomp profile for Electron sandbox, and a local web portal.
+dependencies: []
+path: ""
+defaultUsername: ""
+defaultPassword: ""
+storage:
+  dataRoot: data

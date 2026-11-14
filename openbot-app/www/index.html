@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OpenBot - Umbrel Hub</title>
+  <style>
+    :root {
+      --bg: #0c0e10;
+      --card-bg: #16181b;
+      --card-border: #24282c;
+      --card-hover: #1c1f24;
+      --text: #f3f4f6;
+      --text-muted: #9ca3af;
+      --accent: #f59e0b;
+      --accent-hover: #d97706;
+      --accent-glow: rgba(245, 158, 11, 0.15);
+      --success: #10b981;
+      --code-bg: #090a0c;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.5;
+      padding: 2rem 1rem;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 820px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 1.75rem;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1.25rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .brand svg {
+      width: 52px;
+      height: 52px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    }
+
+    .brand-text h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-text p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: var(--success);
+      padding: 0.4rem 0.85rem;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: var(--success);
+      box-shadow: 0 0 8px var(--success);
+    }
+
+    .hero-card {
+      background: linear-gradient(145deg, #181b1e, #131518);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    }
+
+    .hero-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .hero-desc {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      background: var(--accent);
+      color: #000;
+      font-weight: 600;
+      padding: 0.75rem 1.5rem;
+      border-radius: 10px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      align-self: flex-start;
+      font-size: 0.95rem;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .step-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .step-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .step-number {
+      background: var(--accent-glow);
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    .step-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .code-box {
+      position: relative;
+      background: var(--code-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.85rem;
+      color: #38bdf8;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      overflow-x: auto;
+    }
+
+    .copy-btn {
+      background: transparent;
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 0.3rem 0.6rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      transition: all 0.2s;
+      flex-shrink: 0;
+      margin-left: 0.75rem;
+    }
+
+    .copy-btn:hover {
+      background: var(--card-hover);
+      color: var(--text);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+    }
+
+    .feature-item {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 1rem;
+    }
+
+    .feature-title {
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .feature-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      padding-top: 1rem;
+      border-top: 1px solid var(--card-border);
+    }
+
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="background" x1="160" y1="96" x2="864" y2="928" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#202426"/>
+              <stop offset="1" stop-color="#090b0c"/>
+            </linearGradient>
+            <linearGradient id="mark" x1="300" y1="260" x2="742" y2="778" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#ffb04d"/>
+              <stop offset="1" stop-color="#e98427"/>
+            </linearGradient>
+          </defs>
+          <rect x="52" y="52" width="920" height="920" rx="214" fill="url(#background)"/>
+          <path d="M494 238c133-6 249 83 271 220 25 152-77 288-230 310-156 22-288-80-295-231-7-145 104-292 254-299Z" fill="url(#mark)"/>
+          <path d="M398 415c25 25 38 51 44 83M568 398c25 25 38 51 44 83" fill="none" stroke="#1b1d1e" stroke-linecap="round" stroke-width="34"/>
+        </svg>
+        <div class="brand-text">
+          <h1>OpenBot</h1>
+          <p>Self-Hosted Workspace &amp; AI Teammates on Umbrel</p>
+        </div>
+      </div>
+      <div class="status-badge">
+        <span class="status-dot"></span>
+        Daemon Active
+      </div>
+    </header>
+
+    <div class="hero-card">
+      <div class="hero-title">Your OpenBot Server is Running!</div>
+      <div class="hero-desc">
+        OpenBot is running as a secure, persistent daemon on your Umbrel node. You can pair it with your OpenBot account to manage persistent AI teammates (OpenAI Codex, Claude Code, xAI Grok, Gemini, Nous Hermes, Ollama, and more) from your desktop, mobile app, or browser.
+      </div>
+      <a href="https://openbot.run/app" target="_blank" rel="noopener noreferrer" class="btn-primary">
+        Open Web App (openbot.run/app) &rarr;
+      </a>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🚀 Quick Start: Connect to Your Account</div>
+
+      <div class="step-item">
+        <div class="step-header">
+          <span class="step-number">1</span>
+          <span>Sign In / Claim Server</span>
+        </div>
+        <p class="step-desc">Open the Umbrel Terminal app or SSH into your Umbrel and run this command to log in:</p>
+        <div class="code-box">
+          <code>docker exec -it openbot-app_openbot_1 openbot login</code>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+        <p class="step-desc">Or with Umbrel CLI:</p>
+        <div class="code-box">
+          <code>umbrel app compose openbot-app exec openbot openbot login</code>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-header">
+          <span class="step-number">2</span>
+          <span>Connect Mobile App (iOS / Android)</span>
+        </div>
+        <p class="step-desc">To pair the OpenBot mobile app, generate a terminal QR code:</p>
+        <div class="code-box">
+          <code>docker exec -it openbot-app_openbot_1 openbot mobile-connect</code>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-header">
+          <span class="step-number">3</span>
+          <span>Check Server Status</span>
+        </div>
+        <p class="step-desc">Verify that the background OpenBot server is healthy and connected:</p>
+        <div class="code-box">
+          <code>docker exec -it openbot-app_openbot_1 openbot status</code>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">✨ Features &amp; Supported Providers</div>
+      <div class="grid-2">
+        <div class="feature-item">
+          <div class="feature-title">Persistent AI Teammates</div>
+          <div class="feature-desc">Independent Codex, Claude, Grok, Gemini, Devin, and Hermes agent sessions with dedicated local workspaces.</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-title">Local Models (Ollama)</div>
+          <div class="feature-desc">Automatic detection of local model servers running on your Umbrel or LAN network.</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-title">Embedded Browser &amp; CUA</div>
+          <div class="feature-desc">Autonomous browser sessions and Computer Use support for agent research and workflows.</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-title">Encrypted WebRTC Protocol</div>
+          <div class="feature-desc">Direct peer-to-peer streaming and remote messaging to your desktop and phone apps.</div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <div>OpenBot on Umbrel &bull; Packaged for Umbrel Community App Store</div>
+      <div>
+        <a href="https://github.com/nightly-labs/openbot" target="_blank">GitHub</a> &bull;
+        <a href="https://openbot.run" target="_blank">Website</a> &bull;
+        <a href="https://openbot.run/app" target="_blank">Web Client</a>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    function copyCode(btn) {
+      const code = btn.previousElementSibling.textContent.trim();
+      navigator.clipboard.writeText(code).then(() => {
+        const originalText = btn.textContent;
+        btn.textContent = 'Copied!';
+        btn.style.borderColor = 'var(--accent)';
+        btn.style.color = 'var(--accent)';
+        setTimeout(() => {
+          btn.textContent = originalText;
+          btn.style.borderColor = '';
+          btn.style.color = '';
+        }, 2000);
+      });
+    }
+  </script>
+</body>
+</html>
