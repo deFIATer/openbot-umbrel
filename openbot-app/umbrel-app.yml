@@ -3,7 +3,7 @@ id: openbot-app
 name: OpenBot
 tagline: Local-first workspace & persistent AI teammates
 category: ai
-version: "0.76.1"
+version: "0.77.0"
 port: 8092
 description: >-
   OpenBot is a local-first workspace for persistent AI teammates. It connects to
@@ -36,7 +36,7 @@ gallery:
   - https://raw.githubusercontent.com/nightly-labs/openbot/main/apps/auth-api/content-art/compare/art/article/hermes-agent.webp
 icon: https://raw.githubusercontent.com/nightly-labs/openbot/main/build/icon-production.png
 releaseNotes: >-
-  Updated to OpenBot v0.76.1. Release details: https://github.com/nightly-labs/openbot/releases/tag/v0.76.1
+  Updated to OpenBot v0.77.0. Release details: https://github.com/nightly-labs/openbot/releases/tag/v0.77.0
 dependencies: []
 path: ""
 defaultUsername: ""
